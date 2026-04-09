@@ -36,7 +36,8 @@ const CATEGORY_GROUPS = {
   kendaraan: ['Kendaraan'],
   dokumen:   ['Dokumen'],
   hewan:     ['Hewan'],
-  gadget:    ['Handphone']
+  gadget:    ['Handphone'],
+  orang:     ['Orang']
 };
 
 // GET /api/posts — semua postingan (search & filter + pagination + sort)

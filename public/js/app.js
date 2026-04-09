@@ -179,6 +179,12 @@ function switchToLogin() {
   }, 200);
 }
 
+function validateWA(wa) {
+  if (!wa) return false;
+  const cleaned = wa.replace(/[\s\-().]/g, '');
+  return /^(\+62|62|0)[8][1-9][0-9]{7,11}$/.test(cleaned);
+}
+
 async function doRegister() {
   const name     = document.getElementById('regName').value.trim();
   const email    = document.getElementById('regEmail').value.trim();
@@ -187,6 +193,12 @@ async function doRegister() {
 
   if (!name || !email || !password) {
     return showAlert('registerAlert', 'Nama, email, dan password wajib diisi.');
+  }
+  if (!whatsapp) {
+    return showAlert('registerAlert', 'Nomor WhatsApp wajib diisi.');
+  }
+  if (!validateWA(whatsapp)) {
+    return showAlert('registerAlert', 'Nomor WhatsApp tidak valid. Contoh: 08123456789');
   }
   if (password.length < 6) {
     return showAlert('registerAlert', 'Password minimal 6 karakter.');
@@ -219,6 +231,12 @@ function openCreatePost() {
   if (!getToken()) {
     showToast('Silakan login terlebih dahulu untuk membuat postingan.', 'default');
     openLoginModal();
+    return;
+  }
+  const user = loadUser();
+  if (!user?.whatsapp) {
+    showToast('Lengkapi nomor WhatsApp di profil kamu terlebih dahulu agar orang bisa menghubungimu.', 'default');
+    setTimeout(() => { window.location.href = '/profile.html'; }, 1800);
     return;
   }
   clearAlert('createPostAlert');

@@ -281,12 +281,98 @@ ul { list-style: none; }
 .stat-item .num { font-size: 26px; font-weight: 700; }
 .stat-item .label { font-size: 12px; opacity: .75; margin-top: 2px; }
 
-.hero-right {
+/* ===================== HERO SLIDER ===================== */
+.hero-inner {
+  grid-template-columns: 1fr 1fr;
+}
+
+.hero-slider-wrap {
+  position: relative;
+  border-radius: 20px;
+  overflow: hidden;
+  height: 340px;
+  box-shadow: 0 12px 40px rgba(0,0,0,0.25);
+}
+
+.hero-slides {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.hero-slide {
+  position: absolute;
+  inset: 0;
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
+  opacity: 0;
+  transition: opacity .7s ease;
+  padding: 20px 16px 52px;
 }
-.hero-right svg { width: 100%; max-width: 420px; height: auto; }
+.hero-slide.active { opacity: 1; }
+
+.slide-1 { background: linear-gradient(145deg, #1040a0 0%, #1a8bbf 100%); }
+.slide-2 { background: linear-gradient(145deg, #00695c 0%, #26a69a 100%); }
+.slide-3 { background: linear-gradient(145deg, #4527a0 0%, #7b1fa2 100%); }
+.slide-4 { background: linear-gradient(145deg, #1a237e 0%, #0d47a1 100%); }
+
+.hero-slide svg { flex: 1; width: 100%; max-height: 240px; }
+
+.slide-caption {
+  position: absolute;
+  bottom: 0;
+  left: 0; right: 0;
+  background: rgba(0,0,0,0.25);
+  backdrop-filter: blur(6px);
+  padding: 10px 18px;
+  color: white;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.slide-caption span {
+  font-size: 15px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+.slide-caption p {
+  font-size: 13px;
+  opacity: 0.85;
+  margin: 0;
+}
+
+.slide-dots {
+  position: absolute;
+  bottom: 52px;
+  right: 14px;
+  display: flex;
+  gap: 6px;
+  z-index: 10;
+}
+.dot {
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.45);
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  transition: all .2s;
+}
+.dot.active {
+  background: white;
+  width: 22px;
+  border-radius: 4px;
+}
+
+/* hero-left is now on the RIGHT */
+.hero-left {
+  order: 2;
+}
+.hero-slider-wrap {
+  order: 1;
+}
 
 /* ===================== NAV LINKS (secondary) ===================== */
 .nav-links {
@@ -325,6 +411,7 @@ ul { list-style: none; }
   padding: 0 20px;
   display: flex;
   gap: 0;
+  justify-content: center;
 }
 .cat-tab {
   padding: 14px 20px;
@@ -370,6 +457,17 @@ ul { list-style: none; }
   align-items: center;
   gap: 8px;
   flex-wrap: wrap;
+}
+
+.filter-inner-centered {
+  justify-content: center !important;
+}
+
+.filter-divider {
+  width: 1px;
+  height: 24px;
+  background: var(--gray-200);
+  flex-shrink: 0;
 }
 
 .filter-chips { display: flex; gap: 8px; flex-wrap: wrap; }
@@ -463,10 +561,9 @@ main { flex: 1; }
 /* ===================== POST GRID ===================== */
 .posts-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 340px));
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
   gap: 20px;
   padding-bottom: 40px;
-  justify-content: center;
 }
 
 /* List view */
@@ -1099,6 +1196,17 @@ main { flex: 1; }
 .toast.toast-error { background: var(--red); }
 @keyframes slideIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
 
+/* ===================== TRAKTEER BUTTON ===================== */
+/* Paksa tombol Trakteer selalu fixed di kanan bawah mengikuti scroll */
+#trbtn-container,
+[id^="trbtn"],
+.trbtn-wrapper {
+  position: fixed !important;
+  bottom: 24px !important;
+  right: 24px !important;
+  z-index: 9990 !important;
+}
+
 /* ===================== UTILITIES ===================== */
 .hidden { display: none !important; }
 .text-center { text-align: center; }
@@ -1125,16 +1233,19 @@ main { flex: 1; }
   /* Hero */
   .hero-inner {
     grid-template-columns: 1fr;
-    padding: 40px 20px 52px;
+    padding: 24px 16px 40px;
     text-align: center;
+    gap: 20px;
   }
-  .hero-left { align-items: center; }
+  .hero-left { align-items: center; order: 2; }
+  .hero-slider-wrap { order: 1; height: 220px; border-radius: 14px; }
   .hero-badge { font-size: 12px; }
   .hero h1 { font-size: clamp(24px, 7vw, 36px); }
   .hero-search { max-width: 100%; }
   .hero-stats { justify-content: center; gap: 24px; }
   .stat-item { text-align: center; }
-  .hero-right { display: none; }
+  .slide-caption span { font-size: 13px; }
+  .slide-caption p { display: none; }
 
   /* Category bar */
   .cat-tab { padding: 12px 14px; font-size: 13px; }

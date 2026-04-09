@@ -7,12 +7,25 @@ const authMiddleware = require('../middleware/auth');
 
 const JWT_SECRET = process.env.JWT_SECRET || 'temukan_secret_key_2024';
 
+// Validasi nomor WA Indonesia
+function isValidWA(wa) {
+  if (!wa) return false;
+  const cleaned = wa.replace(/[\s\-().]/g, '');
+  return /^(\+62|62|0)[8][1-9][0-9]{7,11}$/.test(cleaned);
+}
+
 // POST /api/auth/register
 router.post('/register', (req, res) => {
   const { name, email, password, whatsapp } = req.body;
 
   if (!name || !email || !password)
     return res.status(400).json({ error: 'Nama, email, dan password wajib diisi.' });
+
+  if (!whatsapp)
+    return res.status(400).json({ error: 'Nomor WhatsApp wajib diisi.' });
+
+  if (!isValidWA(whatsapp))
+    return res.status(400).json({ error: 'Nomor WhatsApp tidak valid. Contoh: 08123456789 atau +6281234567890' });
 
   if (password.length < 6)
     return res.status(400).json({ error: 'Password minimal 6 karakter.' });
