@@ -1,0 +1,7 @@
+node_modules/
+temukan.db
+temukan.db-journal
+temukan.db-shm
+temukan.db-wal
+uploads/
+.env

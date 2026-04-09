@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Postingan Saya — Temukan.co.id</title>
+  <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+  <link rel="icon" type="image/png" sizes="32x32" href="/img/favicon-32.png" />
+  <link rel="icon" type="image/png" sizes="16x16" href="/img/favicon-16.png" />
+  <link rel="apple-touch-icon" href="/img/favicon-512.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/css/style.css" />
+</head>
+<body>
+
+<nav class="navbar">
+  <div class="navbar-inner">
+    <a href="/" class="navbar-logo">
+      <img src="/img/favicon-512.png" alt="Temukan" />
+      <span>temukan.co.id</span>
+    </a>
+    <div class="navbar-actions">
+      <div id="userNav" class="user-menu">
+        <button class="user-avatar" id="userAvatarBtn" onclick="toggleDropdown()">A</button>
+        <div class="dropdown-menu" id="dropdownMenu">
+          <a href="/profile.html">👤 Profil Saya</a>
+          <a href="/my-posts.html">📋 Postingan Saya</a>
+          <div class="divider"></div>
+          <button onclick="logout()">🚪 Keluar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<main>
+  <div class="container" style="padding-top:32px; padding-bottom:60px; max-width:800px">
+    <div class="section-header">
+      <h2 class="section-title">📋 Postingan Saya</h2>
+      <button class="btn btn-primary btn-sm" onclick="openCreatePost()">+ Buat Postingan</button>
+    </div>
+
+    <div id="myPostsAlert"></div>
+
+    <!-- Tab: Aktif / Selesai -->
+    <div class="filter-chips" style="margin-bottom:20px">
+      <button class="chip active" data-status="aktif" onclick="filterMyPosts('aktif', this)">Aktif</button>
+      <button class="chip" data-status="selesai" onclick="filterMyPosts('selesai', this)">Selesai</button>
+      <button class="chip" data-status="all" onclick="filterMyPosts('all', this)">Semua</button>
+    </div>
+
+    <div id="myPostsList">
+      <div class="spinner"></div>
+    </div>
+  </div>
+</main>
+
+<footer>
+  <p>© 2026 <a href="/">temukan.co.id</a> — <strong>#SemuaBisaKetemu</strong></p>
+</footer>
+
+<div class="toast-container" id="toastContainer"></div>
+<div class="loading-overlay" id="loadingOverlay"><div class="spinner"></div></div>
+
+<!-- Modal Edit Post -->
+<div class="modal-overlay" id="editPostModal">
+  <div class="modal" style="max-width:600px">
+    <div class="modal-header">
+      <span class="modal-title">✏️ Edit Postingan</span>
+      <button class="modal-close" onclick="closeModal('editPostModal')">✕</button>
+    </div>
+    <div class="modal-body">
+      <div id="editPostAlert"></div>
+      <input type="hidden" id="editPostId" />
+      <div class="form-group">
+        <label class="form-label">Judul</label>
+        <input class="form-input" type="text" id="editTitle" />
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Kategori</label>
+          <select class="form-select" id="editCategory">
+            <option value="Dokumen">Dokumen (KTP, SIM, dll)</option>
+            <option value="Dompet">Dompet & Tas</option>
+            <option value="Handphone">Handphone & Gadget</option>
+            <option value="Kunci">Kunci</option>
+            <option value="Hewan">Hewan Peliharaan</option>
+            <option value="Kendaraan">Kendaraan</option>
+            <option value="Perhiasan">Perhiasan & Aksesori</option>
+            <option value="Pakaian">Pakaian</option>
+            <option value="Lainnya">Lainnya</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Tanggal</label>
+          <input class="form-input" type="date" id="editDate" />
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Lokasi</label>
+        <input class="form-input" type="text" id="editLocation" />
+      </div>
+      <div class="form-group">
+        <label class="form-label">Deskripsi</label>
+        <textarea class="form-textarea" id="editDesc" rows="4"></textarea>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Foto Baru (opsional)</label>
+        <div class="upload-area">
+          <input type="file" id="editImage" accept="image/*" onchange="previewEditImage(this)" />
+          <div class="upload-icon">📷</div>
+          <p>Klik untuk mengganti foto</p>
+          <img id="editImagePreview" class="upload-preview hidden" />
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="closeModal('editPostModal')">Batal</button>
+      <button class="btn btn-primary" onclick="saveEditPost()">Simpan</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Konfirmasi Hapus -->
+<div class="modal-overlay" id="deleteConfirmModal">
+  <div class="modal" style="max-width:400px">
+    <div class="modal-header">
+      <span class="modal-title">🗑️ Hapus Postingan</span>
+      <button class="modal-close" onclick="closeModal('deleteConfirmModal')">✕</button>
+    </div>
+    <div class="modal-body">
+      <p>Apakah kamu yakin ingin menghapus postingan ini? Tindakan ini tidak bisa dibatalkan.</p>
+      <input type="hidden" id="deletePostId" />
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="closeModal('deleteConfirmModal')">Batal</button>
+      <button class="btn btn-danger" onclick="confirmDelete()">Hapus</button>
+    </div>
+  </div>
+</div>
+
+<!-- Create Post Modal (reuse) -->
+<div class="modal-overlay" id="createPostModal">
+  <div class="modal" style="max-width:600px">
+    <div class="modal-header">
+      <span class="modal-title">📝 Buat Postingan</span>
+      <button class="modal-close" onclick="closeModal('createPostModal')">✕</button>
+    </div>
+    <div class="modal-body">
+      <div id="createPostAlert"></div>
+      <div class="form-group">
+        <label class="form-label">Tipe <span class="required">*</span></label>
+        <div class="type-toggle">
+          <button class="type-btn" id="typeHilang" onclick="selectType('hilang')">
+            <div class="icon">😢</div><div class="label">Barang Hilang</div>
+          </button>
+          <button class="type-btn" id="typeDitemukan" onclick="selectType('ditemukan')">
+            <div class="icon">🎉</div><div class="label">Barang Ditemukan</div>
+          </button>
+        </div>
+        <input type="hidden" id="postType" />
+      </div>
+      <div class="form-group">
+        <label class="form-label">Judul <span class="required">*</span></label>
+        <input class="form-input" type="text" id="postTitle" placeholder="Contoh: Dompet hilang di area kampus" />
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Kategori <span class="required">*</span></label>
+          <select class="form-select" id="postCategory">
+            <option value="">Pilih kategori</option>
+            <option value="Dokumen">Dokumen</option>
+            <option value="Dompet">Dompet & Tas</option>
+            <option value="Handphone">Handphone & Gadget</option>
+            <option value="Kunci">Kunci</option>
+            <option value="Hewan">Hewan Peliharaan</option>
+            <option value="Kendaraan">Kendaraan</option>
+            <option value="Perhiasan">Perhiasan</option>
+            <option value="Pakaian">Pakaian</option>
+            <option value="Lainnya">Lainnya</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Tanggal <span class="required">*</span></label>
+          <input class="form-input" type="date" id="postDate" />
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Lokasi <span class="required">*</span></label>
+        <input class="form-input" type="text" id="postLocation" placeholder="Contoh: Jl. Dago, Bandung" />
+      </div>
+      <div class="form-group">
+        <label class="form-label">Deskripsi <span class="required">*</span></label>
+        <textarea class="form-textarea" id="postDesc" rows="4" placeholder="Ciri-ciri barang, kondisi terakhir, dll..."></textarea>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Foto Barang</label>
+        <div class="upload-area" id="uploadArea">
+          <input type="file" id="postImage" accept="image/*" onchange="previewImage(this)" />
+          <div class="upload-icon">📷</div>
+          <p>Klik atau seret foto ke sini<br><small>JPG, PNG · Maks. 5MB</small></p>
+          <img id="imagePreview" class="upload-preview hidden" />
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="closeModal('createPostModal')">Batal</button>
+      <button class="btn btn-primary" onclick="submitPost()">🚀 Publikasikan</button>
+    </div>
+  </div>
+</div>
+
+<script src="/js/app.js"></script>
+<script src="/js/my-posts.js"></script>
+</body>
+</html>

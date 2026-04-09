@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Berita — Temukan.co.id</title>
+  <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+  <link rel="icon" type="image/png" sizes="32x32" href="/img/favicon-32.png" />
+  <link rel="icon" type="image/png" sizes="16x16" href="/img/favicon-16.png" />
+  <link rel="apple-touch-icon" href="/img/favicon-512.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/css/style.css" />
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar">
+  <div class="navbar-inner">
+    <a href="/" class="navbar-logo">
+      <img src="/img/favicon-512.png" alt="Temukan" />
+      <span>temukan.co.id</span>
+    </a>
+    <nav class="nav-links">
+      <a href="/" class="nav-link">🏠 Beranda</a>
+      <a href="/berita.html" class="nav-link active">📰 Berita</a>
+    </nav>
+    <div class="navbar-search">
+      <span class="search-icon">🔍</span>
+      <input type="text" id="navSearch" placeholder="Cari di berita..." onkeydown="if(event.key==='Enter') doFeedSearch()" />
+    </div>
+    <div class="navbar-actions">
+      <button class="btn btn-primary" onclick="openCreatePost()">+ Posting</button>
+      <div id="guestNav">
+        <button class="btn btn-outline" onclick="openLoginModal()">Masuk</button>
+      </div>
+      <div id="userNav" class="user-menu hidden">
+        <button class="user-avatar" id="userAvatarBtn" onclick="toggleDropdown()">A</button>
+        <div class="dropdown-menu" id="dropdownMenu">
+          <a href="/profile.html">👤 Profil Saya</a>
+          <a href="/my-posts.html">📋 Postingan Saya</a>
+          <div class="divider"></div>
+          <button onclick="logout()">🚪 Keluar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<main>
+  <div style="max-width:1100px; margin:0 auto; padding:28px 20px 60px; display:grid; grid-template-columns:1fr 300px; gap:24px;">
+
+    <!-- FEED UTAMA -->
+    <div>
+      <!-- Sort bar -->
+      <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:16px; flex-wrap:wrap; gap:10px;">
+        <div>
+          <h2 style="font-size:18px; font-weight:700;">📰 Feed Terbaru</h2>
+          <p style="font-size:13px; color:var(--gray-600); margin-top:2px;" id="feedSubtitle">Postingan barang hilang & ditemukan terbaru dari komunitas</p>
+        </div>
+        <div style="display:flex; gap:8px;">
+          <button class="chip active" data-sort="terbaru" onclick="setSort('terbaru', this)">🕐 Terbaru</button>
+          <button class="chip" data-sort="hilang" onclick="setSort('hilang', this)">🔴 Hilang</button>
+          <button class="chip" data-sort="ditemukan" onclick="setSort('ditemukan', this)">🟢 Ditemukan</button>
+        </div>
+      </div>
+
+      <!-- Feed list -->
+      <div id="feedList">
+        <div class="spinner"></div>
+      </div>
+
+      <!-- Load more -->
+      <div id="loadMoreContainer" style="text-align:center; padding:20px; display:none;">
+        <button class="btn btn-outline" onclick="loadMoreFeed()" id="loadMoreBtn">
+          Muat lebih banyak
+        </button>
+      </div>
+    </div>
+
+    <!-- SIDEBAR -->
+    <aside>
+      <!-- Pencarian -->
+      <div style="background:white; border-radius:var(--radius); padding:20px; box-shadow:var(--shadow-sm); margin-bottom:16px;">
+        <h3 style="font-size:14px; font-weight:700; margin-bottom:12px;">🔍 Cari di Feed</h3>
+        <div style="display:flex; gap:8px;">
+          <input class="form-input" type="text" id="feedSearchInput" placeholder="Kata kunci..." style="font-size:13px;" onkeydown="if(event.key==='Enter') doFeedSearch()" />
+          <button class="btn btn-primary btn-sm" onclick="doFeedSearch()">Cari</button>
+        </div>
+      </div>
+
+      <!-- Filter kategori -->
+      <div style="background:white; border-radius:var(--radius); padding:20px; box-shadow:var(--shadow-sm); margin-bottom:16px;">
+        <h3 style="font-size:14px; font-weight:700; margin-bottom:12px;">🏷️ Filter Kategori</h3>
+        <div style="display:flex; flex-direction:column; gap:6px;">
+          <button class="feed-cat-btn active" data-group="" onclick="setFeedCategory('', this)">🔍 Semua Kategori</button>
+          <button class="feed-cat-btn" data-group="barang" onclick="setFeedCategory('barang', this)">👜 Barang Umum</button>
+          <button class="feed-cat-btn" data-group="kendaraan" onclick="setFeedCategory('kendaraan', this)">🚗 Kendaraan</button>
+          <button class="feed-cat-btn" data-group="dokumen" onclick="setFeedCategory('dokumen', this)">📄 Dokumen</button>
+          <button class="feed-cat-btn" data-group="hewan" onclick="setFeedCategory('hewan', this)">🐾 Hewan Peliharaan</button>
+          <button class="feed-cat-btn" data-group="gadget" onclick="setFeedCategory('gadget', this)">📱 Gadget & HP</button>
+        </div>
+      </div>
+
+      <!-- Info platform -->
+      <div style="background:var(--blue-light); border:2px solid var(--blue); border-radius:var(--radius); padding:20px;">
+        <h3 style="font-size:14px; font-weight:700; color:var(--blue-dark); margin-bottom:8px;">🔍 Tentang Temukan</h3>
+        <p style="font-size:13px; color:var(--gray-600); line-height:1.6;">
+          Platform informasi barang hilang & ditemukan. Bersama kita percaya bahwa <strong>#SemuaBisaKetemu</strong>
+        </p>
+        <button class="btn btn-primary btn-sm" style="margin-top:12px; width:100%;" onclick="openCreatePost()">
+          + Buat Postingan
+        </button>
+      </div>
+    </aside>
+  </div>
+</main>
+
+<footer>
+  <p>© 2026 <a href="/">temukan.co.id</a> — Dibuat dengan ❤️ oleh Muhammad Alief Irham &amp; Tim · <strong>#SemuaBisaKetemu</strong></p>
+</footer>
+
+<div class="toast-container" id="toastContainer"></div>
+<div class="loading-overlay" id="loadingOverlay"><div class="spinner"></div></div>
+
+<!-- Modals (login, register, create post, detail) dari app.js -->
+<!-- ============ MODAL: LOGIN ============ -->
+<div class="modal-overlay" id="loginModal">
+  <div class="modal">
+    <div class="modal-header">
+      <span class="modal-title">Masuk ke Temukan</span>
+      <button class="modal-close" onclick="closeModal('loginModal')">✕</button>
+    </div>
+    <div class="modal-body">
+      <div id="loginAlert"></div>
+      <div class="form-group">
+        <label class="form-label">Email</label>
+        <input class="form-input" type="email" id="loginEmail" placeholder="email@kamu.com" />
+      </div>
+      <div class="form-group">
+        <label class="form-label">Password</label>
+        <input class="form-input" type="password" id="loginPassword" placeholder="••••••" />
+      </div>
+      <button class="btn btn-primary" style="width:100%" onclick="doLogin()">Masuk</button>
+      <p class="auth-footer" style="margin-top:16px">Belum punya akun? <a href="#" onclick="switchToRegister()">Daftar sekarang</a></p>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="registerModal">
+  <div class="modal">
+    <div class="modal-header">
+      <span class="modal-title">Daftar Akun</span>
+      <button class="modal-close" onclick="closeModal('registerModal')">✕</button>
+    </div>
+    <div class="modal-body">
+      <div id="registerAlert"></div>
+      <div class="form-group"><label class="form-label">Nama Lengkap <span class="required">*</span></label><input class="form-input" type="text" id="regName" /></div>
+      <div class="form-group"><label class="form-label">Email <span class="required">*</span></label><input class="form-input" type="email" id="regEmail" /></div>
+      <div class="form-group"><label class="form-label">Nomor WhatsApp</label><input class="form-input" type="tel" id="regWA" placeholder="08xxxxxxxxxx" /></div>
+      <div class="form-group"><label class="form-label">Password <span class="required">*</span></label><input class="form-input" type="password" id="regPassword" /></div>
+      <button class="btn btn-primary" style="width:100%" onclick="doRegister()">Daftar</button>
+      <p class="auth-footer" style="margin-top:16px">Sudah punya akun? <a href="#" onclick="switchToLogin()">Masuk di sini</a></p>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="createPostModal">
+  <div class="modal" style="max-width:600px">
+    <div class="modal-header"><span class="modal-title">📝 Buat Postingan</span><button class="modal-close" onclick="closeModal('createPostModal')">✕</button></div>
+    <div class="modal-body">
+      <div id="createPostAlert"></div>
+      <div class="form-group">
+        <label class="form-label">Tipe <span class="required">*</span></label>
+        <div class="type-toggle">
+          <button class="type-btn" id="typeHilang" onclick="selectType('hilang')"><div class="icon">😢</div><div class="label">Barang Hilang</div></button>
+          <button class="type-btn" id="typeDitemukan" onclick="selectType('ditemukan')"><div class="icon">🎉</div><div class="label">Barang Ditemukan</div></button>
+        </div>
+        <input type="hidden" id="postType" />
+      </div>
+      <div class="form-group"><label class="form-label">Judul <span class="required">*</span></label><input class="form-input" type="text" id="postTitle" /></div>
+      <div class="form-row">
+        <div class="form-group"><label class="form-label">Kategori <span class="required">*</span></label>
+          <select class="form-select" id="postCategory">
+            <option value="">Pilih kategori</option>
+            <option value="Dokumen">Dokumen</option><option value="Dompet">Dompet & Tas</option>
+            <option value="Handphone">Handphone & Gadget</option><option value="Kunci">Kunci</option>
+            <option value="Hewan">Hewan Peliharaan</option><option value="Kendaraan">Kendaraan</option>
+            <option value="Perhiasan">Perhiasan</option><option value="Pakaian">Pakaian</option><option value="Lainnya">Lainnya</option>
+          </select>
+        </div>
+        <div class="form-group"><label class="form-label">Tanggal <span class="required">*</span></label><input class="form-input" type="date" id="postDate" /></div>
+      </div>
+      <div class="form-group"><label class="form-label">Lokasi <span class="required">*</span></label><input class="form-input" type="text" id="postLocation" /></div>
+      <div class="form-group"><label class="form-label">Deskripsi <span class="required">*</span></label><textarea class="form-textarea" id="postDesc" rows="4"></textarea></div>
+      <div class="form-group">
+        <label class="form-label">Foto Barang</label>
+        <div class="upload-area" id="uploadArea">
+          <input type="file" id="postImage" accept="image/*" onchange="previewImage(this)" />
+          <div class="upload-icon">📷</div><p>Klik atau seret foto ke sini</p>
+          <img id="imagePreview" class="upload-preview hidden" />
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="closeModal('createPostModal')">Batal</button>
+      <button class="btn btn-primary" onclick="submitPost()">🚀 Publikasikan</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="postDetailModal">
+  <div class="modal" style="max-width:700px">
+    <div class="modal-header">
+      <span class="modal-title" id="detailModalTitle">Detail Postingan</span>
+      <button class="modal-close" onclick="closeModal('postDetailModal')">✕</button>
+    </div>
+    <div class="modal-body" id="postDetailContent"><div class="spinner"></div></div>
+  </div>
+</div>
+
+<style>
+.feed-cat-btn {
+  padding: 8px 12px;
+  border-radius: 8px;
+  border: 1px solid var(--gray-200);
+  background: white;
+  font-size: 13px;
+  color: var(--gray-600);
+  cursor: pointer;
+  text-align: left;
+  transition: all .15s;
+}
+.feed-cat-btn:hover { background: var(--blue-light); color: var(--blue); border-color: var(--blue); }
+.feed-cat-btn.active { background: var(--blue); color: white; border-color: var(--blue); font-weight: 600; }
+
+@media (max-width: 768px) {
+  main > div { grid-template-columns: 1fr !important; }
+  aside { display: none; }
+}
+</style>
+
+<script src="/js/app.js"></script>
+<script>
+let feedPage = 1;
+let feedFilters = { type: '', categoryGroup: '', q: '' };
+let allFeedPosts = [];
+let hasMore = true;
+
+async function loadFeed(reset = true) {
+  if (reset) {
+    feedPage = 1;
+    allFeedPosts = [];
+    hasMore = true;
+    document.getElementById('feedList').innerHTML = '<div class="spinner"></div>';
+  }
+
+  const params = new URLSearchParams({ page: feedPage, limit: 8, status: 'aktif' });
+  if (feedFilters.type)          params.set('type', feedFilters.type);
+  if (feedFilters.categoryGroup) params.set('categoryGroup', feedFilters.categoryGroup);
+  if (feedFilters.q)             params.set('q', feedFilters.q);
+
+  try {
+    const data = await apiFetch('/posts?' + params);
+    allFeedPosts = reset ? data.posts : [...allFeedPosts, ...data.posts];
+    hasMore = feedPage < data.pagination.totalPages;
+
+    renderFeed(allFeedPosts);
+
+    const btn = document.getElementById('loadMoreContainer');
+    btn.style.display = hasMore ? 'block' : 'none';
+  } catch (err) {
+    document.getElementById('feedList').innerHTML =
+      `<div class="alert alert-error">⚠️ Gagal memuat feed: ${err.message}</div>`;
+  }
+}
+
+function renderFeed(posts) {
+  const container = document.getElementById('feedList');
+  if (!posts.length) {
+    container.innerHTML = `
+      <div class="empty-state">
+        <div class="icon">📭</div>
+        <h3>Belum ada postingan</h3>
+        <p>Jadilah yang pertama posting di komunitas ini!</p>
+        <button class="btn btn-primary" style="margin-top:16px" onclick="openCreatePost()">+ Buat Postingan</button>
+      </div>`;
+    return;
+  }
+
+  container.innerHTML = posts.map(post => {
+    const avatarLetter = (post.user_name || 'U').charAt(0).toUpperCase();
+    const badge = post.type === 'hilang'
+      ? `<span class="post-badge badge-hilang">🔴 Hilang</span>`
+      : `<span class="post-badge badge-ditemukan">🟢 Ditemukan</span>`;
+
+    const imgSection = post.image_path
+      ? `<img src="${post.image_path}" class="feed-card-img" onclick="openPostDetail(${post.id})" alt="${escapeHtml(post.title)}" loading="lazy">`
+      : `<div class="feed-card-img-placeholder" onclick="openPostDetail(${post.id})">${getCategoryIcon(post.category)}</div>`;
+
+    const pageUrl = encodeURIComponent(window.location.origin + '/?post=' + post.id);
+    const shareText = encodeURIComponent(`[${post.type === 'hilang' ? 'HILANG' : 'DITEMUKAN'}] ${post.title} — ${post.location}. Lihat di Temukan.co.id! #SemuaBisaKetemu`);
+
+    return `
+      <div class="feed-card">
+        <div class="feed-card-header">
+          <div class="feed-avatar">${avatarLetter}</div>
+          <div class="feed-user-info">
+            <div class="feed-user-name">${escapeHtml(post.user_name || 'Anonim')}</div>
+            <div class="feed-user-meta">${timeAgo(post.created_at)} · ${escapeHtml(post.location)}</div>
+          </div>
+          ${badge}
+        </div>
+
+        <div class="feed-card-content" onclick="openPostDetail(${post.id})">
+          <h3>${escapeHtml(post.title)}</h3>
+          <p>${escapeHtml(post.description)}</p>
+        </div>
+
+        ${imgSection}
+
+        <div class="feed-meta-bar">
+          <span>🏷️ ${escapeHtml(post.category)}</span>
+          <span>📅 ${formatDate(post.date_lost_found)}</span>
+        </div>
+
+        <div class="feed-card-actions">
+          <button class="feed-action-btn" onclick="openPostDetail(${post.id})">💬 Info Lengkap</button>
+          <a href="https://wa.me/?text=${shareText}%20${pageUrl}" target="_blank" class="feed-action-btn" style="text-decoration:none;">📲 WA</a>
+          <a href="https://twitter.com/intent/tweet?text=${shareText}&url=${pageUrl}" target="_blank" class="feed-action-btn" style="text-decoration:none;">🐦 Tweet</a>
+          <button class="feed-action-btn" onclick="copyPostLink(${post.id})">🔗 Salin</button>
+        </div>
+      </div>
+    `;
+  }).join('');
+}
+
+function loadMoreFeed() {
+  if (!hasMore) return;
+  feedPage++;
+  loadFeed(false);
+}
+
+function setSort(type, btn) {
+  document.querySelectorAll('[data-sort]').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  feedFilters.type = type === 'terbaru' ? '' : type;
+  loadFeed(true);
+}
+
+function setFeedCategory(group, btn) {
+  document.querySelectorAll('.feed-cat-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  feedFilters.categoryGroup = group;
+  loadFeed(true);
+}
+
+function doFeedSearch() {
+  const q = (document.getElementById('feedSearchInput')?.value ||
+             document.getElementById('navSearch')?.value || '').trim();
+  feedFilters.q = q;
+  loadFeed(true);
+}
+
+// Modal close on overlay click
+document.querySelectorAll('.modal-overlay').forEach(overlay => {
+  overlay.addEventListener('click', e => { if (e.target === overlay) closeModal(overlay.id); });
+});
+
+document.addEventListener('DOMContentLoaded', () => {
+  updateNavbar();
+  loadFeed(true);
+});
+</script>
+</body>
+</html>

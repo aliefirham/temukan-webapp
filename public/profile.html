@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Profil Saya — Temukan.co.id</title>
+  <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+  <link rel="icon" type="image/png" sizes="32x32" href="/img/favicon-32.png" />
+  <link rel="icon" type="image/png" sizes="16x16" href="/img/favicon-16.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/css/style.css" />
+</head>
+<body>
+
+<nav class="navbar">
+  <div class="navbar-inner">
+    <a href="/" class="navbar-logo">
+      <img src="/img/favicon-512.png" alt="Temukan" />
+      <span>temukan.co.id</span>
+    </a>
+    <div class="navbar-actions">
+      <div id="userNav" class="user-menu">
+        <button class="user-avatar" id="userAvatarBtn" onclick="toggleDropdown()">A</button>
+        <div class="dropdown-menu" id="dropdownMenu">
+          <a href="/profile.html">👤 Profil Saya</a>
+          <a href="/my-posts.html">📋 Postingan Saya</a>
+          <div class="divider"></div>
+          <button onclick="logout()">🚪 Keluar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<main>
+  <div class="container" style="max-width:640px; padding-top:40px; padding-bottom:60px;">
+
+    <!-- Profile Card -->
+    <div style="background:white; border-radius:16px; overflow:hidden; box-shadow:var(--shadow-md); margin-bottom:24px;">
+      <!-- Cover / Header -->
+      <div style="height:100px; background:linear-gradient(135deg, var(--blue) 0%, #1a8bbf 100%);"></div>
+      <div style="padding:0 28px 28px; position:relative;">
+        <!-- Avatar besar -->
+        <div id="profileAvatar" style="
+          width:80px; height:80px; border-radius:50%;
+          background:var(--blue); color:white;
+          display:flex; align-items:center; justify-content:center;
+          font-size:32px; font-weight:700;
+          border:4px solid white;
+          position:absolute; top:-40px; left:28px;
+          box-shadow:var(--shadow-sm);
+        ">A</div>
+
+        <div style="padding-top:48px;">
+          <h2 id="profileName" style="font-size:22px; font-weight:700; margin-bottom:4px;">-</h2>
+          <p id="profileEmail" style="font-size:14px; color:var(--gray-600); margin-bottom:4px;">-</p>
+          <p id="profileWA" style="font-size:14px; color:var(--gray-600);">-</p>
+
+          <!-- Stats -->
+          <div style="display:flex; gap:24px; margin-top:16px; padding-top:16px; border-top:1px solid var(--gray-200);">
+            <div style="text-align:center;">
+              <div id="statTotal" style="font-size:22px; font-weight:700; color:var(--blue);">-</div>
+              <div style="font-size:12px; color:var(--gray-600);">Total Post</div>
+            </div>
+            <div style="text-align:center;">
+              <div id="statHilang" style="font-size:22px; font-weight:700; color:var(--red);">-</div>
+              <div style="font-size:12px; color:var(--gray-600);">Barang Hilang</div>
+            </div>
+            <div style="text-align:center;">
+              <div id="statDitemukan" style="font-size:22px; font-weight:700; color:var(--green);">-</div>
+              <div style="font-size:12px; color:var(--gray-600);">Barang Ditemukan</div>
+            </div>
+            <div style="text-align:center;">
+              <div id="statSelesai" style="font-size:22px; font-weight:700; color:var(--gray-600);">-</div>
+              <div style="font-size:12px; color:var(--gray-600);">Selesai</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Edit Profil -->
+    <div style="background:white; border-radius:16px; padding:28px; box-shadow:var(--shadow-sm);">
+      <h3 style="font-size:16px; font-weight:700; margin-bottom:20px;">✏️ Edit Profil</h3>
+
+      <div id="profileAlert"></div>
+
+      <div class="form-group">
+        <label class="form-label">Nama Lengkap <span class="required">*</span></label>
+        <input class="form-input" type="text" id="editName" placeholder="Nama kamu" />
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Email</label>
+        <input class="form-input" type="email" id="editEmail" disabled
+          style="background:var(--gray-100); color:var(--gray-600); cursor:not-allowed;" />
+        <small style="color:var(--gray-600); font-size:12px; margin-top:4px; display:block;">Email tidak dapat diubah</small>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Nomor WhatsApp</label>
+        <input class="form-input" type="tel" id="editWA" placeholder="08xxxxxxxxxx" />
+        <small style="color:var(--gray-600); font-size:12px; margin-top:4px; display:block;">
+          Nomor ini akan ditampilkan di postingan kamu supaya orang bisa menghubungi kamu
+        </small>
+      </div>
+
+      <div style="display:flex; gap:12px;">
+        <button class="btn btn-primary" onclick="saveProfile()" style="flex:1;">💾 Simpan Perubahan</button>
+        <a href="/" class="btn btn-ghost">Kembali</a>
+      </div>
+    </div>
+
+  </div>
+</main>
+
+<footer>
+  <p>© 2026 <a href="/">temukan.co.id</a> — <strong>#SemuaBisaKetemu</strong></p>
+</footer>
+
+<div class="toast-container" id="toastContainer"></div>
+<div class="loading-overlay" id="loadingOverlay"><div class="spinner"></div></div>
+
+<script src="/js/app.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', async () => {
+  if (!getToken()) {
+    showToast('Silakan login terlebih dahulu.', 'error');
+    setTimeout(() => { window.location.href = '/'; }, 1200);
+    return;
+  }
+
+  try {
+    // Load profil dari server
+    const user = await apiFetch('/auth/me');
+
+    // Tampilkan data
+    document.getElementById('profileAvatar').textContent = user.name.charAt(0).toUpperCase();
+    document.getElementById('profileName').textContent = user.name;
+    document.getElementById('profileEmail').textContent = user.email;
+    document.getElementById('profileWA').textContent = user.whatsapp
+      ? '📱 ' + user.whatsapp
+      : '📱 Nomor WA belum diisi';
+
+    // Isi form edit
+    document.getElementById('editName').value = user.name;
+    document.getElementById('editEmail').value = user.email;
+    document.getElementById('editWA').value = user.whatsapp || '';
+
+    // Update localStorage juga
+    saveUser(user);
+    updateNavbar();
+
+    // Load stats postingan
+    const posts = await apiFetch('/posts/user/my');
+    document.getElementById('statTotal').textContent = posts.length;
+    document.getElementById('statHilang').textContent = posts.filter(p => p.type === 'hilang').length;
+    document.getElementById('statDitemukan').textContent = posts.filter(p => p.type === 'ditemukan').length;
+    document.getElementById('statSelesai').textContent = posts.filter(p => p.status === 'selesai').length;
+
+  } catch (err) {
+    showToast('Gagal memuat profil: ' + err.message, 'error');
+  }
+});
+
+async function saveProfile() {
+  const name = document.getElementById('editName').value.trim();
+  const whatsapp = document.getElementById('editWA').value.trim();
+
+  if (!name) return showAlert('profileAlert', 'Nama wajib diisi.');
+
+  try {
+    showLoading(true);
+    await apiFetch('/auth/me', {
+      method: 'PUT',
+      body: JSON.stringify({ name, whatsapp })
+    });
+
+    // Update display
+    document.getElementById('profileAvatar').textContent = name.charAt(0).toUpperCase();
+    document.getElementById('profileName').textContent = name;
+    document.getElementById('profileWA').textContent = whatsapp ? '📱 ' + whatsapp : '📱 Nomor WA belum diisi';
+
+    // Update user di localStorage
+    const user = loadUser();
+    if (user) { user.name = name; user.whatsapp = whatsapp; saveUser(user); updateNavbar(); }
+
+    showAlert('profileAlert', 'Profil berhasil disimpan! ✅', 'success');
+  } catch (err) {
+    showAlert('profileAlert', err.message);
+  } finally {
+    showLoading(false);
+  }
+}
+</script>
+</body>
+</html>
