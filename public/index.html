@@ -23,59 +23,105 @@
       <span>temukan.co.id</span>
     </a>
     <nav class="nav-links">
-      <a href="/" class="nav-link active">🏠 Beranda</a>
-      <a href="/berita.html" class="nav-link">📰 Berita</a>
+      <a href="/" class="nav-link active">Beranda</a>
+      <a href="/berita.html" class="nav-link">Berita</a>
     </nav>
     <div class="navbar-search">
-      <span class="search-icon">🔍</span>
+      <svg class="search-icon-svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
       <input type="text" id="navSearch" placeholder="Cari barang hilang atau ditemukan..." />
     </div>
     <div class="navbar-actions">
-      <button class="btn btn-primary" id="btnPostNow" onclick="openCreatePost()">
-        + Posting
-      </button>
-      <!-- Guest -->
+      <button class="btn btn-primary" id="btnPostNow" onclick="openCreatePost()">+ Posting</button>
       <div id="guestNav">
         <button class="btn btn-outline" onclick="openLoginModal()">Masuk</button>
       </div>
-      <!-- Logged in -->
       <div id="userNav" class="user-menu hidden">
         <button class="user-avatar" id="userAvatarBtn" onclick="toggleDropdown()">A</button>
         <div class="dropdown-menu" id="dropdownMenu">
-          <a href="/profile.html">👤 Profil Saya</a>
-          <a href="/my-posts.html">📋 Postingan Saya</a>
+          <a href="/profile.html">Profil Saya</a>
+          <a href="/my-posts.html">Postingan Saya</a>
           <div class="divider"></div>
-          <button onclick="logout()">🚪 Keluar</button>
+          <button onclick="logout()">Keluar</button>
         </div>
       </div>
     </div>
   </div>
 </nav>
 
-<!-- HERO -->
+<!-- HERO — Split Layout -->
 <section class="hero" id="heroSection">
-  <h1>🔍 #SemuaBisaKetemu</h1>
-  <p>Platform informasi barang hilang & ditemukan di Indonesia.<br>Temukan adalah kita semua.</p>
-  <div class="hero-search">
-    <input type="text" id="heroSearchInput" placeholder="Cari tas, dompet, KTP, kunci..." />
-    <button onclick="doSearch()">Cari</button>
-  </div>
-  <div class="hero-stats" id="heroStats">
-    <div class="stat-item"><div class="num" id="totalPosts">-</div><div class="label">Total Postingan</div></div>
-    <div class="stat-item"><div class="num" id="totalHilang">-</div><div class="label">Barang Hilang</div></div>
-    <div class="stat-item"><div class="num" id="totalDitemukan">-</div><div class="label">Barang Ditemukan</div></div>
+  <div class="hero-inner">
+    <div class="hero-left">
+      <div class="hero-badge">Platform Lost &amp; Found #1 Indonesia</div>
+      <h1>#SemuaBisaKetemu</h1>
+      <p>Platform informasi barang hilang &amp; ditemukan di Indonesia.<br>Bersama kita bisa menemukan apa yang hilang.</p>
+      <div class="hero-search">
+        <input type="text" id="heroSearchInput" placeholder="Cari tas, dompet, KTP, kunci..." />
+        <button onclick="doSearch()">Cari Sekarang</button>
+      </div>
+      <div class="hero-stats" id="heroStats">
+        <div class="stat-item"><div class="num" id="totalPosts">-</div><div class="label">Total Postingan</div></div>
+        <div class="stat-item"><div class="num" id="totalHilang">-</div><div class="label">Barang Hilang</div></div>
+        <div class="stat-item"><div class="num" id="totalDitemukan">-</div><div class="label">Barang Ditemukan</div></div>
+      </div>
+    </div>
+    <div class="hero-right">
+      <svg viewBox="0 0 420 360" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <!-- Background circles -->
+        <circle cx="210" cy="175" r="165" fill="rgba(255,255,255,0.05)"/>
+        <circle cx="210" cy="175" r="125" fill="rgba(255,255,255,0.05)"/>
+        <!-- Magnifying glass body -->
+        <circle cx="195" cy="160" r="88" fill="rgba(255,255,255,0.12)" stroke="rgba(255,255,255,0.85)" stroke-width="13"/>
+        <!-- Magnifying glass handle -->
+        <line x1="261" y1="226" x2="328" y2="293" stroke="rgba(255,255,255,0.85)" stroke-width="17" stroke-linecap="round"/>
+        <!-- Map pin -->
+        <circle cx="195" cy="133" r="10" fill="white"/>
+        <path d="M195 123 Q179 123 179 140 Q179 153 195 162 Q211 153 211 140 Q211 123 195 123 Z" fill="rgba(255,255,255,0.25)" stroke="rgba(255,255,255,0.7)" stroke-width="1.5"/>
+        <!-- Phone inside glass -->
+        <rect x="160" y="150" width="22" height="36" rx="4" fill="rgba(255,255,255,0.2)" stroke="rgba(255,255,255,0.8)" stroke-width="2"/>
+        <line x1="167" y1="179" x2="175" y2="179" stroke="rgba(255,255,255,0.7)" stroke-width="1.5"/>
+        <!-- Key inside glass -->
+        <circle cx="210" cy="188" r="8" fill="none" stroke="rgba(255,255,255,0.8)" stroke-width="2"/>
+        <line x1="218" y1="188" x2="234" y2="188" stroke="rgba(255,255,255,0.8)" stroke-width="2"/>
+        <line x1="228" y1="188" x2="228" y2="194" stroke="rgba(255,255,255,0.8)" stroke-width="2"/>
+        <line x1="234" y1="188" x2="234" y2="194" stroke="rgba(255,255,255,0.8)" stroke-width="2"/>
+        <!-- Document (top right) -->
+        <rect x="310" y="38" width="48" height="62" rx="5" fill="rgba(255,255,255,0.1)" stroke="rgba(255,255,255,0.6)" stroke-width="2.5"/>
+        <line x1="320" y1="58" x2="348" y2="58" stroke="rgba(255,255,255,0.5)" stroke-width="2"/>
+        <line x1="320" y1="68" x2="348" y2="68" stroke="rgba(255,255,255,0.5)" stroke-width="2"/>
+        <line x1="320" y1="78" x2="338" y2="78" stroke="rgba(255,255,255,0.5)" stroke-width="2"/>
+        <!-- Car (bottom left) -->
+        <rect x="28" y="248" width="72" height="40" rx="8" fill="rgba(255,255,255,0.1)" stroke="rgba(255,255,255,0.6)" stroke-width="2.5"/>
+        <rect x="38" y="232" width="52" height="22" rx="6" fill="rgba(255,255,255,0.1)" stroke="rgba(255,255,255,0.6)" stroke-width="2"/>
+        <circle cx="48" cy="290" r="9" fill="rgba(255,255,255,0.55)"/>
+        <circle cx="80" cy="290" r="9" fill="rgba(255,255,255,0.55)"/>
+        <!-- Paw print (top left) -->
+        <circle cx="60" cy="88" r="11" fill="rgba(255,255,255,0.55)"/>
+        <circle cx="44" cy="75" r="6" fill="rgba(255,255,255,0.5)"/>
+        <circle cx="60" cy="68" r="6" fill="rgba(255,255,255,0.5)"/>
+        <circle cx="76" cy="75" r="6" fill="rgba(255,255,255,0.5)"/>
+        <!-- Wallet (bottom right) -->
+        <rect x="336" y="238" width="58" height="40" rx="6" fill="rgba(255,255,255,0.1)" stroke="rgba(255,255,255,0.6)" stroke-width="2.5"/>
+        <circle cx="374" cy="258" r="8" fill="none" stroke="rgba(255,255,255,0.6)" stroke-width="2"/>
+        <!-- Sparkles -->
+        <circle cx="148" cy="48" r="3" fill="rgba(255,255,255,0.7)"/>
+        <circle cx="360" cy="155" r="4" fill="rgba(255,255,255,0.6)"/>
+        <circle cx="108" cy="298" r="3" fill="rgba(255,255,255,0.6)"/>
+        <circle cx="28" cy="172" r="2" fill="rgba(255,255,255,0.7)"/>
+      </svg>
+    </div>
   </div>
 </section>
 
 <!-- CATEGORY TABS -->
 <div class="category-bar">
   <div class="category-inner">
-    <button class="cat-tab active" data-group="">🔍 Semua</button>
-    <button class="cat-tab" data-group="barang">👜 Barang</button>
-    <button class="cat-tab" data-group="kendaraan">🚗 Kendaraan</button>
-    <button class="cat-tab" data-group="dokumen">📄 Dokumen</button>
-    <button class="cat-tab" data-group="hewan">🐾 Hewan</button>
-    <button class="cat-tab" data-group="gadget">📱 Gadget</button>
+    <button class="cat-tab active" data-group="">Semua</button>
+    <button class="cat-tab" data-group="barang">Barang</button>
+    <button class="cat-tab" data-group="kendaraan">Kendaraan</button>
+    <button class="cat-tab" data-group="dokumen">Dokumen</button>
+    <button class="cat-tab" data-group="hewan">Hewan</button>
+    <button class="cat-tab" data-group="gadget">Gadget</button>
   </div>
 </div>
 
@@ -84,22 +130,29 @@
   <div class="filter-inner">
     <div class="filter-chips">
       <button class="chip active" data-type="">Semua</button>
-      <button class="chip" data-type="hilang">🔴 Hilang</button>
-      <button class="chip" data-type="ditemukan">🟢 Ditemukan</button>
+      <button class="chip chip-hilang" data-type="hilang">Hilang</button>
+      <button class="chip chip-ditemukan" data-type="ditemukan">Ditemukan</button>
     </div>
-    <select class="filter-select" id="filterLocation" onchange="applyFilters()">
-      <option value="">Semua Lokasi</option>
-      <option value="Jakarta">Jakarta</option>
-      <option value="Bandung">Bandung</option>
-      <option value="Surabaya">Surabaya</option>
-      <option value="Yogyakarta">Yogyakarta</option>
-      <option value="Medan">Medan</option>
-      <option value="Semarang">Semarang</option>
-      <option value="Makassar">Makassar</option>
-      <option value="Malang">Malang</option>
-      <option value="Bogor">Bogor</option>
-      <option value="Depok">Depok</option>
-    </select>
+    <div class="filter-right">
+      <select class="filter-select" id="filterLocation" onchange="applyFilters()">
+        <option value="">Semua Lokasi</option>
+        <option value="Jakarta">Jakarta</option>
+        <option value="Bandung">Bandung</option>
+        <option value="Surabaya">Surabaya</option>
+        <option value="Yogyakarta">Yogyakarta</option>
+        <option value="Medan">Medan</option>
+        <option value="Semarang">Semarang</option>
+        <option value="Makassar">Makassar</option>
+        <option value="Malang">Malang</option>
+        <option value="Bogor">Bogor</option>
+        <option value="Depok">Depok</option>
+      </select>
+      <select class="filter-select" id="sortBy" onchange="applyFilters()">
+        <option value="newest">Terbaru</option>
+        <option value="oldest">Terlama</option>
+        <option value="reward">Berhadiah</option>
+      </select>
+    </div>
   </div>
 </div>
 
@@ -107,8 +160,18 @@
 <main>
   <div class="container">
     <div class="section-header">
-      <h2 class="section-title" id="sectionTitle">Postingan Terbaru</h2>
-      <span class="section-count" id="sectionCount"></span>
+      <div class="section-header-left">
+        <h2 class="section-title" id="sectionTitle">Postingan Terbaru</h2>
+        <span class="section-count" id="sectionCount"></span>
+      </div>
+      <div class="view-toggle">
+        <button class="view-btn active" id="viewGrid" onclick="setView('grid')" title="Tampilan Grid">
+          <svg width="16" height="16" viewBox="0 0 16 16"><rect x="1" y="1" width="6" height="6" rx="1" fill="currentColor"/><rect x="9" y="1" width="6" height="6" rx="1" fill="currentColor"/><rect x="1" y="9" width="6" height="6" rx="1" fill="currentColor"/><rect x="9" y="9" width="6" height="6" rx="1" fill="currentColor"/></svg>
+        </button>
+        <button class="view-btn" id="viewList" onclick="setView('list')" title="Tampilan List">
+          <svg width="16" height="16" viewBox="0 0 16 16"><rect x="1" y="2" width="14" height="3" rx="1" fill="currentColor"/><rect x="1" y="7" width="14" height="3" rx="1" fill="currentColor"/><rect x="1" y="12" width="14" height="3" rx="1" fill="currentColor"/></svg>
+        </button>
+      </div>
     </div>
     <div class="posts-grid" id="postsGrid">
       <div class="empty-state"><div class="spinner"></div></div>
@@ -117,8 +180,44 @@
   </div>
 </main>
 
-<footer>
-  <p>© 2026 <a href="/">temukan.co.id</a> — Dibuat dengan ❤️ oleh Muhammad Alief Irham &amp; Tim · <strong>#SemuaBisaKetemu</strong></p>
+<!-- FOOTER -->
+<footer class="site-footer">
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <a href="/" class="footer-logo">
+        <img src="/img/favicon-512.png" alt="Temukan" />
+        <span>temukan.co.id</span>
+      </a>
+      <p>Platform informasi barang hilang &amp; ditemukan di Indonesia. Bersama kita bisa menemukan apa yang hilang.</p>
+      <p class="footer-tag">#SemuaBisaKetemu</p>
+    </div>
+    <div class="footer-links">
+      <div class="footer-col">
+        <h4>Platform</h4>
+        <a href="/">Beranda</a>
+        <a href="/berita.html">Berita</a>
+        <a href="/about.html">Tentang Kami</a>
+        <a href="/about.html">Tim Kami</a>
+      </div>
+      <div class="footer-col">
+        <h4>Informasi</h4>
+        <a href="/terms.html">Syarat &amp; Ketentuan</a>
+        <a href="/privacy.html">Kebijakan Privasi</a>
+        <a href="/about.html">Bantuan / FAQ</a>
+        <a href="/about.html">Visi &amp; Misi</a>
+      </div>
+      <div class="footer-col">
+        <h4>Kontak</h4>
+        <a href="mailto:hello@temukan.co.id">hello@temukan.co.id</a>
+        <a href="https://instagram.com/temukan.co.id" target="_blank" rel="noopener">Instagram</a>
+        <a href="https://twitter.com/temukancoid" target="_blank" rel="noopener">Twitter / X</a>
+        <a href="https://trakteer.id/alief_irham" target="_blank" rel="noopener">Dukung Kami</a>
+      </div>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>© 2026 <a href="/">temukan.co.id</a> · Dibuat dengan ❤️ oleh Muhammad Alief Irham &amp; Tim</p>
+  </div>
 </footer>
 
 <!-- TOAST CONTAINER -->
@@ -189,7 +288,7 @@
 <div class="modal-overlay" id="createPostModal">
   <div class="modal" style="max-width:600px">
     <div class="modal-header">
-      <span class="modal-title">📝 Buat Postingan</span>
+      <span class="modal-title">Buat Postingan</span>
       <button class="modal-close" onclick="closeModal('createPostModal')">✕</button>
     </div>
     <div class="modal-body">
@@ -218,12 +317,12 @@
           <select class="form-select" id="postCategory">
             <option value="">Pilih kategori</option>
             <option value="Dokumen">Dokumen (KTP, SIM, dll)</option>
-            <option value="Dompet">Dompet & Tas</option>
-            <option value="Handphone">Handphone & Gadget</option>
+            <option value="Dompet">Dompet &amp; Tas</option>
+            <option value="Handphone">Handphone &amp; Gadget</option>
             <option value="Kunci">Kunci</option>
             <option value="Hewan">Hewan Peliharaan</option>
             <option value="Kendaraan">Kendaraan</option>
-            <option value="Perhiasan">Perhiasan & Aksesori</option>
+            <option value="Perhiasan">Perhiasan &amp; Aksesori</option>
             <option value="Pakaian">Pakaian</option>
             <option value="Lainnya">Lainnya</option>
           </select>
@@ -242,6 +341,11 @@
         <textarea class="form-textarea" id="postDesc" placeholder="Jelaskan ciri-ciri barang, kondisi, atau informasi penting lainnya..." rows="4"></textarea>
       </div>
       <div class="form-group">
+        <label class="form-label">Reward / Imbalan <span class="form-hint">(Opsional)</span></label>
+        <input class="form-input" type="text" id="postReward" placeholder="Contoh: Rp500.000 atau Balas budi" />
+        <small class="form-small">Tambahkan reward untuk menarik perhatian penemu atau pemilik</small>
+      </div>
+      <div class="form-group">
         <label class="form-label">Foto Barang</label>
         <div class="upload-area" id="uploadArea">
           <input type="file" id="postImage" accept="image/*" onchange="previewImage(this)" />
@@ -253,7 +357,7 @@
     </div>
     <div class="modal-footer">
       <button class="btn btn-ghost" onclick="closeModal('createPostModal')">Batal</button>
-      <button class="btn btn-primary" onclick="submitPost()">🚀 Publikasikan</button>
+      <button class="btn btn-primary" onclick="submitPost()">Publikasikan</button>
     </div>
   </div>
 </div>

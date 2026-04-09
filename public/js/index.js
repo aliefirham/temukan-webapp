@@ -3,7 +3,8 @@
    ============================================= */
 
 let currentPage = 1;
-let currentFilters = { q: '', type: '', category: '', categoryGroup: '', location: '' };
+let currentView = 'grid';
+let currentFilters = { q: '', type: '', category: '', categoryGroup: '', location: '', sort: 'newest' };
 
 // ===================== LOAD POSTS =====================
 
@@ -20,6 +21,7 @@ async function loadPosts(page = 1) {
   if (currentFilters.categoryGroup) params.set('categoryGroup', currentFilters.categoryGroup);
   else if (currentFilters.category) params.set('category', currentFilters.category);
   if (currentFilters.location)      params.set('location', currentFilters.location);
+  if (currentFilters.sort)          params.set('sort', currentFilters.sort);
   params.set('page', page);
   params.set('limit', 12);
 
@@ -79,8 +81,8 @@ function updateSectionHeader(total) {
   if (!titleEl) return;
 
   let title = 'Postingan Terbaru';
-  if (currentFilters.type === 'hilang') title = '🔴 Barang Hilang';
-  else if (currentFilters.type === 'ditemukan') title = '🟢 Barang Ditemukan';
+  if (currentFilters.type === 'hilang') title = 'Barang Hilang';
+  else if (currentFilters.type === 'ditemukan') title = 'Barang Ditemukan';
   if (currentFilters.q) title = `Hasil pencarian: "${currentFilters.q}"`;
 
   titleEl.textContent = title;
@@ -131,7 +133,26 @@ function doSearch() {
 
 function applyFilters() {
   currentFilters.location = document.getElementById('filterLocation')?.value || '';
+  currentFilters.sort = document.getElementById('sortBy')?.value || 'newest';
   loadPosts(1);
+}
+
+function setView(mode) {
+  currentView = mode;
+  const grid = document.getElementById('postsGrid');
+  const btnGrid = document.getElementById('viewGrid');
+  const btnList = document.getElementById('viewList');
+  if (!grid) return;
+
+  if (mode === 'list') {
+    grid.classList.add('list-view');
+    btnGrid?.classList.remove('active');
+    btnList?.classList.add('active');
+  } else {
+    grid.classList.remove('list-view');
+    btnGrid?.classList.add('active');
+    btnList?.classList.remove('active');
+  }
 }
 
 // Category tabs

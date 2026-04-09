@@ -228,6 +228,8 @@ function openCreatePost() {
   document.getElementById('postCategory').value = '';
   document.getElementById('postLocation').value = '';
   document.getElementById('postDesc').value = '';
+  const rewardEl = document.getElementById('postReward');
+  if (rewardEl) rewardEl.value = '';
   document.getElementById('postDate').value = new Date().toISOString().split('T')[0];
   document.getElementById('postImage').value = '';
   document.getElementById('imagePreview')?.classList.add('hidden');
@@ -273,6 +275,8 @@ async function submitPost() {
   if (!date)        return showAlert('createPostAlert', 'Tanggal wajib diisi.');
   if (!description) return showAlert('createPostAlert', 'Deskripsi wajib diisi.');
 
+  const reward = document.getElementById('postReward')?.value.trim() || '';
+
   const formData = new FormData();
   formData.append('type', type);
   formData.append('title', title);
@@ -280,6 +284,7 @@ async function submitPost() {
   formData.append('location', location);
   formData.append('date_lost_found', date);
   formData.append('description', description);
+  if (reward) formData.append('reward', reward);
   if (imageFile) formData.append('image', imageFile);
 
   try {
@@ -339,14 +344,18 @@ function renderPostCard(post) {
     : `<div style="display:flex;align-items:center;justify-content:center;height:100%;font-size:52px;">${getCategoryIcon(post.category)}</div>`;
 
   const badge = post.type === 'hilang'
-    ? `<span class="post-badge badge-hilang">🔴 Hilang</span>`
-    : `<span class="post-badge badge-ditemukan">🟢 Ditemukan</span>`;
+    ? `<span class="post-badge badge-hilang">Hilang</span>`
+    : `<span class="post-badge badge-ditemukan">Ditemukan</span>`;
+
+  const rewardBadge = post.reward
+    ? `<span class="post-badge badge-reward">★ ${escapeHtml(post.reward)}</span>`
+    : '';
 
   return `
     <div class="post-card" onclick="openPostDetail(${post.id})">
       <div class="post-card-img">${imgHtml}</div>
       <div class="post-card-body">
-        ${badge}
+        <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px">${badge}${rewardBadge}</div>
         <div class="post-title">${escapeHtml(post.title)}</div>
         <div class="post-meta">
           <span>📍 ${escapeHtml(post.location)}</span>
@@ -391,8 +400,8 @@ function renderPostDetail(post) {
     : `<div style="background:var(--blue-pale);border-radius:12px;height:160px;display:flex;align-items:center;justify-content:center;font-size:72px;margin-bottom:20px;">${getCategoryIcon(post.category)}</div>`;
 
   const badge = post.type === 'hilang'
-    ? `<span class="post-badge badge-hilang">🔴 Barang Hilang</span>`
-    : `<span class="post-badge badge-ditemukan">🟢 Barang Ditemukan</span>`;
+    ? `<span class="post-badge badge-hilang">Barang Hilang</span>`
+    : `<span class="post-badge badge-ditemukan">Barang Ditemukan</span>`;
 
   // Kontak via WA
   let contactHtml = '';
@@ -456,7 +465,7 @@ function renderPostDetail(post) {
   `;
 
   document.getElementById('detailModalTitle').textContent =
-    post.type === 'hilang' ? '🔴 Barang Hilang' : '🟢 Barang Ditemukan';
+    post.type === 'hilang' ? 'Barang Hilang' : 'Barang Ditemukan';
 
   document.getElementById('postDetailContent').innerHTML = `
     ${imgHtml}
@@ -470,6 +479,7 @@ function renderPostDetail(post) {
       <span>📅 ${formatDate(post.date_lost_found)}</span>
       <span>🏷️ ${escapeHtml(post.category)}</span>
       <span>🕐 Diposting ${timeAgo(post.created_at)}</span>
+      ${post.reward ? `<span style="color:#f39c12;font-weight:600">★ Reward: ${escapeHtml(post.reward)}</span>` : ''}
     </div>
     <div class="post-detail-desc">${escapeHtml(post.description).replace(/\n/g, '<br>')}</div>
     ${contactHtml}

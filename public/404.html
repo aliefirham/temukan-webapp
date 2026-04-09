@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>404 — Halaman Tidak Ditemukan · Temukan.co.id</title>
+  <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/css/style.css" />
+  <style>
+    .error-page {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 40px 20px;
+      background: linear-gradient(135deg, var(--blue-pale) 0%, var(--gray-100) 100%);
+    }
+    .error-code {
+      font-size: clamp(80px, 15vw, 140px);
+      font-weight: 700;
+      color: var(--blue);
+      line-height: 1;
+      margin-bottom: 8px;
+      opacity: 0.15;
+      position: absolute;
+    }
+    .error-content {
+      position: relative;
+      z-index: 1;
+    }
+    .error-icon { font-size: 72px; margin-bottom: 20px; }
+    .error-title { font-size: clamp(22px, 4vw, 32px); font-weight: 700; color: var(--gray-800); margin-bottom: 12px; }
+    .error-desc { font-size: 16px; color: var(--gray-600); margin-bottom: 32px; line-height: 1.6; }
+    .error-actions { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+  </style>
+</head>
+<body>
+  <div class="error-page">
+    <div class="error-code">404</div>
+    <div class="error-content">
+      <div class="error-icon">🔍</div>
+      <h1 class="error-title">Halaman Tidak Ditemukan</h1>
+      <p class="error-desc">
+        Sepertinya halaman yang kamu cari tidak ada atau sudah dipindahkan.<br>
+        Tapi tenang, barang yang hilang pasti bisa ketemu!
+      </p>
+      <div class="error-actions">
+        <a href="/" class="btn btn-primary btn-lg">Kembali ke Beranda</a>
+        <a href="/berita.html" class="btn btn-outline btn-lg">Lihat Berita</a>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

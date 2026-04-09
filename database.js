@@ -33,11 +33,19 @@ db.exec(`
     location        TEXT NOT NULL,
     date_lost_found TEXT NOT NULL,
     image_path      TEXT,
+    reward          TEXT,
     status          TEXT DEFAULT 'aktif' CHECK(status IN ('aktif', 'selesai')),
     created_at      DATETIME DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
   )
 `);
+
+// Migrasi: tambah kolom reward jika belum ada (untuk DB yang sudah jalan)
+try {
+  db.exec('ALTER TABLE posts ADD COLUMN reward TEXT');
+} catch (e) {
+  // Kolom sudah ada, abaikan
+}
 
 console.log('✅ Database siap di:', DB_PATH);
 module.exports = db;

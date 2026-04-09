@@ -39,9 +39,9 @@ const CATEGORY_GROUPS = {
   gadget:    ['Handphone']
 };
 
-// GET /api/posts — semua postingan (search & filter + pagination)
+// GET /api/posts — semua postingan (search & filter + pagination + sort)
 router.get('/', (req, res) => {
-  const { q, type, category, categoryGroup, location, status, page = 1, limit = 12 } = req.query;
+  const { q, type, category, categoryGroup, location, status, sort, page = 1, limit = 12 } = req.query;
 
   let where = 'WHERE 1=1';
   const params = [];
@@ -80,11 +80,16 @@ router.get('/', (req, res) => {
   const totalRow = db.get(`SELECT COUNT(*) as total ${baseFrom}`, params);
   const total = totalRow ? totalRow.total : 0;
 
+  // Sorting
+  let orderBy = 'ORDER BY p.created_at DESC';
+  if (sort === 'oldest') orderBy = 'ORDER BY p.created_at ASC';
+  else if (sort === 'reward') orderBy = 'ORDER BY (p.reward IS NOT NULL AND p.reward != \'\') DESC, p.created_at DESC';
+
   const offset = (parseInt(page) - 1) * parseInt(limit);
   const posts = db.all(
     `SELECT p.*, u.name as user_name, u.whatsapp as user_whatsapp
      ${baseFrom}
-     ORDER BY p.created_at DESC LIMIT ? OFFSET ?`,
+     ${orderBy} LIMIT ? OFFSET ?`,
     [...params, parseInt(limit), offset]
   );
 
@@ -122,7 +127,7 @@ router.get('/:id', (req, res) => {
 
 // POST /api/posts — buat postingan baru
 router.post('/', authMiddleware, upload.single('image'), (req, res) => {
-  const { type, title, description, category, location, date_lost_found } = req.body;
+  const { type, title, description, category, location, date_lost_found, reward } = req.body;
 
   if (!type || !title || !description || !category || !location || !date_lost_found) {
     if (req.file) fs.unlinkSync(req.file.path);
@@ -137,9 +142,9 @@ router.post('/', authMiddleware, upload.single('image'), (req, res) => {
   try {
     const result = db.run(
       `INSERT INTO posts
-         (user_id, type, title, description, category, location, date_lost_found, image_path)
-       VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
-      [req.user.id, type, title, description, category, location, date_lost_found, image_path]
+         (user_id, type, title, description, category, location, date_lost_found, image_path, reward)
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+      [req.user.id, type, title, description, category, location, date_lost_found, image_path, reward || null]
     );
     const newPost = db.get('SELECT * FROM posts WHERE id = ?', [result.lastInsertRowid]);
     res.status(201).json({ message: 'Postingan berhasil dibuat!', post: newPost });
@@ -156,7 +161,7 @@ router.put('/:id', authMiddleware, upload.single('image'), (req, res) => {
   if (!post) return res.status(404).json({ error: 'Postingan tidak ditemukan.' });
   if (post.user_id !== req.user.id) return res.status(403).json({ error: 'Tidak diizinkan.' });
 
-  const { type, title, description, category, location, date_lost_found } = req.body;
+  const { type, title, description, category, location, date_lost_found, reward } = req.body;
   let image_path = post.image_path;
 
   if (req.file) {
@@ -169,12 +174,12 @@ router.put('/:id', authMiddleware, upload.single('image'), (req, res) => {
 
   db.run(
     `UPDATE posts SET type=?, title=?, description=?, category=?,
-     location=?, date_lost_found=?, image_path=? WHERE id=?`,
+     location=?, date_lost_found=?, image_path=?, reward=? WHERE id=?`,
     [
       type || post.type, title || post.title,
       description || post.description, category || post.category,
       location || post.location, date_lost_found || post.date_lost_found,
-      image_path, post.id
+      image_path, reward !== undefined ? (reward || null) : post.reward, post.id
     ]
   );
   res.json({ message: 'Postingan berhasil diperbarui.' });
